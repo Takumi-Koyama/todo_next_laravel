@@ -4,6 +4,7 @@ import Axios from "axios";
 import { User } from "../../models/User";
 import { AuthResponse } from "../../models/AuthResponse";
 import { useState } from "react";
+import { HomeButton } from "../../components/HomeButton/HomeButton";
 
 export const Login: React.FC = () => {
   const [user, setUser] = useState<User>();
@@ -37,13 +38,19 @@ export const Login: React.FC = () => {
       <h1>Login</h1>
       <div className={styles.loginForm}>
         メールアドレス
-        <input className={styles.loginInput} onChange={changedEmail} />
+        <input
+          type="email"
+          className={styles.loginInput}
+          onChange={changedEmail}
+        />
         パスワード
-        <input className={styles.loginInput} onChange={changedPassword} />
+        <input
+          type="password"
+          className={styles.loginInput}
+          onChange={changedPassword}
+        />
         <div>
-          <button className={styles.backButton} onClick={() => router.back()}>
-            back
-          </button>
+          <HomeButton />
           <button className={styles.loginButton} onClick={pushLogin}>
             Login
           </button>

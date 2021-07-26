@@ -9,6 +9,7 @@ import { Todo, initTodo } from "../../models/Todo";
 import Axios from "axios";
 import { initialTodos } from "../../modules/TodosModule";
 import { getCookieValue, todo_token_key } from "../../utils/Cookie";
+import { HomeButton } from "../../components/HomeButton/HomeButton";
 
 export const TodoList: React.FC = () => {
   const [todo, setTodo] = useState<Todo>(initTodo);
@@ -30,7 +31,11 @@ export const TodoList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      dispatch(initialTodos(response.data));
+      // eslint-disable-next-line no-console
+      console.log(response.status);
+      if (response.status !== 401) {
+        dispatch(initialTodos(response.data));
+      }
     })();
   }, [dispatch, initialTodos]);
 
@@ -62,6 +67,7 @@ export const TodoList: React.FC = () => {
           onChange={changedDescription}
         />
       </div>
+      <HomeButton />
       <button className={styles.todoAddButton} onClick={addClick}>
         add
       </button>

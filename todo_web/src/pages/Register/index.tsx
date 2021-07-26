@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "./Register.module.css";
 import Axios from "axios";
 import { UserRegisterRequest } from "../../models/UserRegisterRequest";
+import { HomeButton } from "../../components/HomeButton/HomeButton";
 
 export const Register: React.FC = () => {
   const [user, setUser] = useState<UserRegisterRequest>();
@@ -66,9 +67,7 @@ export const Register: React.FC = () => {
           onChange={changedConfirmation}
         />
         <div>
-          <button className={styles.backButton} onClick={() => router.back()}>
-            back
-          </button>
+          <HomeButton />
           <button className={styles.registerButton} onClick={pushRegister}>
             Register
           </button>
