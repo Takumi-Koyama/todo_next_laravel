@@ -4,7 +4,7 @@ info:
   title: Todo API
   version: "1.0"
 servers:
-- url: http://localhost:8080
+- url: http://localhost:4000
   description: 接続先
 tags:
 - description: Todo

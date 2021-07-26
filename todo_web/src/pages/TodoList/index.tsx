@@ -14,10 +14,6 @@ export const TodoList: React.FC = () => {
   const [todo, setTodo] = useState<Todo>(initTodo);
 
   const router = useRouter();
-  const isReady = router.isReady;
-  if (!isReady) {
-    return <></>;
-  }
 
   const token = getCookieValue(todo_token_key);
   if (token === "") {

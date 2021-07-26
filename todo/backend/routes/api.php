@@ -14,11 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group([
-    'prefix' => 'auth'
-], function () {
-    Route::post('login', 'AuthController@login');
-});
+Route::post('auth/login', 'AuthController@login');
+Route::post('users/register', 'UserController@register');
 
 Route::group([
     'prefix' => 'auth',
@@ -30,11 +27,12 @@ Route::group([
 });
 
 Route::group([
+    'prefix' => 'todos',
     'middleware' => 'auth:api'
 ], function () {
-    Route::post('todos', 'TodoController@create');
-    Route::get('todos', 'TodoController@fetch');
-    Route::get('todos/{todoId}', 'TodoController@fetchOne');
-    Route::delete('todos/{todoId}', 'TodoController@delete');
-    Route::patch('todos/{todoId}', 'TodoController@update');
+    Route::post('/', 'TodoController@create');
+    Route::get('/', 'TodoController@fetch');
+    Route::get('{todoId}', 'TodoController@fetchOne');
+    Route::delete('{todoId}', 'TodoController@delete');
+    Route::patch('{todoId}', 'TodoController@update');
 });

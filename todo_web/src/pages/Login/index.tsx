@@ -36,7 +36,9 @@ export const Login: React.FC = () => {
     <>
       <h1>Login</h1>
       <div className={styles.loginForm}>
+        メールアドレス
         <input className={styles.loginInput} onChange={changedEmail} />
+        パスワード
         <input className={styles.loginInput} onChange={changedPassword} />
         <div>
           <button className={styles.backButton} onClick={() => router.back()}>
