@@ -9,7 +9,7 @@ import { Todo, initTodo } from "../../models/Todo";
 import Axios from "axios";
 import { initialTodos } from "../../modules/TodosModule";
 import { getCookieValue, todo_token_key } from "../../utils/Cookie";
-import { HomeButton } from "../../components/HomeButton/HomeButton";
+import { Layout } from "../../components/Layout/Layout";
 
 export const TodoList: React.FC = () => {
   const [todo, setTodo] = useState<Todo>(initTodo);
@@ -31,8 +31,6 @@ export const TodoList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      // eslint-disable-next-line no-console
-      console.log(response.status);
       if (response.status !== 401) {
         dispatch(initialTodos(response.data));
       }
@@ -58,19 +56,20 @@ export const TodoList: React.FC = () => {
   };
 
   return (
-    <div>
+    <Layout>
       <h1>TodoList</h1>
-      <div className={styles.todoForm}>
+      <div>
+        Title
         <input className={styles.todoTitleInput} onChange={changedTitle} />
+        Description
         <textarea
           className={styles.todoDescriptionInput}
           onChange={changedDescription}
         />
+        <button className="primaryButton" onClick={addClick}>
+          Add
+        </button>
       </div>
-      <HomeButton />
-      <button className={styles.todoAddButton} onClick={addClick}>
-        add
-      </button>
       {todos.map((todo) => {
         return (
           <TodoItem
@@ -82,7 +81,7 @@ export const TodoList: React.FC = () => {
           />
         );
       })}
-    </div>
+    </Layout>
   );
 };
 

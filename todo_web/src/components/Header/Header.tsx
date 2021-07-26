@@ -10,12 +10,19 @@ export const Header: React.FC = () => {
     router.push("/");
   };
 
+  const goBack = () => {
+    router.back();
+  };
+
   return (
-    <div className={style.headerBack}>
-      <div className={style.headerLogo} onClick={() => router.push("/")}>
-        todo
+    <div className={style.headerArea}>
+      <div className={style.logo} onClick={() => router.push("/")}>
+        Todo
       </div>
-      <div className={style.headerButtonArea}>
+      <div className={style.headerRightArea}>
+        <button className={style.headerButton} onClick={goBack}>
+          戻る
+        </button>
         <button className={style.headerButton} onClick={logoutAccount}>
           ログアウト
         </button>

@@ -4,7 +4,7 @@ import Axios from "axios";
 import { User } from "../../models/User";
 import { AuthResponse } from "../../models/AuthResponse";
 import { useState } from "react";
-import { HomeButton } from "../../components/HomeButton/HomeButton";
+import { Layout } from "../../components/Layout/Layout";
 
 export const Login: React.FC = () => {
   const [user, setUser] = useState<User>();
@@ -34,29 +34,28 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <>
+    <Layout>
       <h1>Login</h1>
-      <div className={styles.loginForm}>
-        メールアドレス
+      <div>
+        Mail
         <input
           type="email"
           className={styles.loginInput}
           onChange={changedEmail}
         />
-        パスワード
+        Password
         <input
           type="password"
           className={styles.loginInput}
           onChange={changedPassword}
         />
         <div>
-          <HomeButton />
-          <button className={styles.loginButton} onClick={pushLogin}>
+          <button className="primaryButton" onClick={pushLogin}>
             Login
           </button>
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 

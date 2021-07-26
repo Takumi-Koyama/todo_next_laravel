@@ -1,11 +1,12 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { Layout } from "../components/Layout/Layout";
 
 export const Home: React.FC = () => {
   const router = useRouter();
 
   return (
-    <div className="container">
+    <Layout>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -14,6 +15,7 @@ export const Home: React.FC = () => {
       <main>
         <h1>Home</h1>
         <button
+          className="primaryButton"
           onClick={() => {
             router.push("/Register");
           }}
@@ -21,6 +23,7 @@ export const Home: React.FC = () => {
           Register
         </button>
         <button
+          className="primaryButton"
           onClick={() => {
             router.push("/Login");
           }}
@@ -28,6 +31,7 @@ export const Home: React.FC = () => {
           Login
         </button>
         <button
+          className="primaryButton"
           onClick={() => {
             router.push("TodoList");
           }}
@@ -35,7 +39,7 @@ export const Home: React.FC = () => {
           Todo
         </button>
       </main>
-    </div>
+    </Layout>
   );
 };
 

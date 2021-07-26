@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import styles from "./TodoEdit.module.css";
 import { useState } from "react";
 import { Todo } from "../../models/Todo";
+import { Layout } from "../../components/Layout/Layout";
 
 const TodoEdit: React.FC = () => {
   const router = useRouter();
@@ -39,9 +40,9 @@ const TodoEdit: React.FC = () => {
   // };
 
   return (
-    <div>
+    <Layout>
       <h1>TodoEdit</h1>
-      <div className={styles.todoForm}>
+      <div>
         <input
           className={styles.todoTitleInput}
           value={todo.title}
@@ -52,18 +53,15 @@ const TodoEdit: React.FC = () => {
           value={todo.description}
           onChange={changedDescription}
         />
-        <button className={styles.todoUpdateButton}>update</button>
-        <button className={styles.backButton} onClick={() => router.back()}>
-          back
-        </button>
+        <button className="primaryButton">Update</button>
         <button
-          className={styles.todoDeleteButton}
+          className="dangerButton"
           //  onClick={deleteClick}
         >
-          delete
+          Delete
         </button>
       </div>
-    </div>
+    </Layout>
   );
 };
 

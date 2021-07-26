@@ -3,7 +3,7 @@ import { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import store from "../app/store";
 import Axios from "axios";
-import { Header } from "../components/Header/Header";
+import "./styles.css";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   Axios.defaults.baseURL = "http://localhost:4000/api/";
@@ -23,7 +23,6 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <>
       <Provider store={store}>
-        <Header />
         <Component {...pageProps} />
       </Provider>
     </>
