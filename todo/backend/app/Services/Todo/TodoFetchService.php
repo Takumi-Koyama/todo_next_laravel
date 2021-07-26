@@ -10,8 +10,7 @@ final class TodoFetchService
 {
     public function main(): Collection
     {
-        //1は仮置き
-        $todos = Todo::where('user_id', 1)->get();
+        $todos = Todo::where('user_id', auth()->user()->id)->get();
         return $todos;
     }
 }
