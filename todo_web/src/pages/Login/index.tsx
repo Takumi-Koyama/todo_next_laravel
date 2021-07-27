@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import styles from "./Login.module.css";
 import Axios from "axios";
-import { User } from "../../models/User";
-import { AuthResponse } from "../../models/AuthResponse";
+import { AuthLoginRequest } from "../../models/Request/Auth/AuthLoginRequest";
+import { AuthResponse } from "../../models/Response/AuthResponse";
 import { useState } from "react";
 import { Layout } from "../../components/Layout/Layout";
 
 export const Login: React.FC = () => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<AuthLoginRequest>();
   const router = useRouter();
   const pushLogin = async () => {
     const response = await Axios.post<AuthResponse>("auth/login", user);

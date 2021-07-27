@@ -5,14 +5,18 @@ import { TodoItem } from "../../components/TodoItem/TodoItem";
 import { useRouter } from "next/router";
 import styles from "./TodoList.module.css";
 import { useState } from "react";
-import { Todo, initTodo } from "../../models/Todo";
-import Axios from "axios";
-import { initialTodos } from "../../modules/TodosModule";
+import Axios, { AxiosResponse } from "axios";
+import { addTodos, initialTodos } from "../../modules/TodosModule";
 import { getCookieValue, todo_token_key } from "../../utils/Cookie";
 import { Layout } from "../../components/Layout/Layout";
+import {
+  initTodoCreateRequest,
+  TodoCreateRequest,
+} from "../../models/Request/Todo/TodoCreateRequest";
+import { TodoResponse } from "../../models/Response/TodoResponse";
 
 export const TodoList: React.FC = () => {
-  const [todo, setTodo] = useState<Todo>(initTodo);
+  const [todo, setTodo] = useState<TodoCreateRequest>(initTodoCreateRequest);
 
   const router = useRouter();
 
@@ -26,7 +30,7 @@ export const TodoList: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await Axios.get<Todo[]>("todos", {
+      const response = await Axios.get<TodoResponse[]>("todos", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -52,7 +56,15 @@ export const TodoList: React.FC = () => {
   };
 
   const addClick = async () => {
-    // await Axios.post<Todo, AxiosResponse<string>>("todos", todo);
+    const response = await Axios.post<
+      TodoCreateRequest,
+      AxiosResponse<TodoResponse>
+    >("todos", todo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    dispatch(addTodos(response.data));
   };
 
   return (
