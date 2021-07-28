@@ -1,5 +1,9 @@
 export type TodoUpdateRequest = {
-  id: number;
   title: string;
   description: string;
+};
+
+export const initUpdateRequest = {
+  title: "",
+  description: "",
 };

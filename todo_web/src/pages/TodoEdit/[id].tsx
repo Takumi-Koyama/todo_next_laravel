@@ -1,24 +1,53 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "./TodoEdit.module.css";
 import { useState } from "react";
-import { Todo } from "../../models/Todo";
+import { castTodo } from "../../models/Todo";
 import { Layout } from "../../components/Layout/Layout";
+import {
+  initUpdateRequest,
+  TodoUpdateRequest,
+} from "../../models/Request/Todo/TodoUpdateRequest";
+import Axios, { AxiosResponse } from "axios";
+import { getCookieValue, todo_token_key } from "../../utils/Cookie";
+import { deleteTodos, updateTodos } from "../../modules/TodosModule";
+import { TodoResponse } from "../../models/Response/TodoResponse";
 
 const TodoEdit: React.FC = () => {
   const router = useRouter();
+
   const paramsId = router.query.id;
   if (typeof paramsId !== "string") {
     return;
   }
   const id = parseInt(paramsId);
 
-  const todos = useSelector((state: RootState) => state.todos);
-  const initTodo = todos.find((todo) => todo.id === id);
-  const [todo, setTodo] = useState<Todo>(initTodo);
+  const token = getCookieValue(todo_token_key);
+  if (token === "") {
+    router.push("/Login");
+  }
 
-  // const dispatch = useDispatch();
+  const [todo, setTodo] = useState<TodoUpdateRequest>(initUpdateRequest);
+
+  useEffect(() => {
+    (async () => {
+      const response: AxiosResponse<TodoResponse> =
+        await Axios.get<TodoResponse>(`todos/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      if (response.status === 200) {
+        const initTodo = castTodo(response.data);
+        setTodo(initTodo);
+      } else {
+        router.push("/Login");
+      }
+    })();
+  }, [setTodo]);
+
+  const dispatch = useDispatch();
 
   const changedTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     //左側の引数に対して、右側の値をマージする
@@ -34,30 +63,57 @@ const TodoEdit: React.FC = () => {
     setTodo(newTodo);
   };
 
-  // const deleteClick = async () => {
-  //   dispatch(deleteTodo(todo.id));
-  //   router.push("/TodoList");
-  // };
+  const updateClick = async () => {
+    const response = await Axios.patch<
+      TodoUpdateRequest,
+      AxiosResponse<TodoResponse>
+    >(`todos/${id}`, todo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.status === 200) {
+      dispatch(updateTodos(response.data));
+      router.push("/TodoList");
+    } else {
+      alert("更新できませんでした");
+    }
+  };
+
+  const deleteClick = async () => {
+    const response = await Axios.delete<number>(`todos/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.status === 200) {
+      dispatch(deleteTodos(id));
+      router.push("/TodoList");
+    } else {
+      alert("削除できませんでした");
+    }
+  };
 
   return (
     <Layout>
       <h1>TodoEdit</h1>
       <div>
+        Title
         <input
           className={styles.todoTitleInput}
           value={todo.title}
           onChange={changedTitle}
         />
+        Description
         <textarea
           className={styles.todoDescriptionInput}
           value={todo.description}
           onChange={changedDescription}
         />
-        <button className="primaryButton">Update</button>
-        <button
-          className="dangerButton"
-          //  onClick={deleteClick}
-        >
+        <button className="primaryButton" onClick={updateClick}>
+          Update
+        </button>
+        <button className="dangerButton" onClick={deleteClick}>
           Delete
         </button>
       </div>

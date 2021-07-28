@@ -1,35 +1,65 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  // createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { castTodo, Todo } from "../models/Todo";
 import { TodoResponse } from "../models/Response/TodoResponse";
+// import Axios, { AxiosResponse } from "axios";
+// import { useDispatch } from "react-redux";
+// import { useRouter } from "next/router";
+// import { getCookieValue, todo_token_key } from "../utils/Cookie";
 
-const initialState: Todo[] = [];
+// const initTodos = createAsyncThunk("/TodoList", async () => {
+//   const router = useRouter();
+//   const token = getCookieValue(todo_token_key);
+//   if (token === "") {
+//     router.push("/Login");
+//   }
+//   const response: AxiosResponse<TodoResponse[]> = await Axios.get<
+//     TodoResponse[]
+//   >("todos", {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+//   if (response.status === 200) {
+//     return response.data;
+//   } else {
+//     router.push("/Login");
+//   }
+// });
+
+type State = {
+  todos: Todo[];
+};
+
+const initialState: State = {
+  todos: [],
+};
 
 const todosModule = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    initialTodos(todos, action: PayloadAction<TodoResponse[]>) {
-      action.payload.map((todoResponse) => {
-        const todo = castTodo(todoResponse);
-        todos.push(todo);
-      });
+    initialTodos(state, action: PayloadAction<TodoResponse[]>) {
+      state.todos = action.payload;
     },
-    addTodos(todos, action: PayloadAction<TodoResponse>) {
+    addTodos(state, action: PayloadAction<TodoResponse>) {
       const todo = castTodo(action.payload);
-      todos = [todo, ...todos];
+      state.todos = [todo, ...state.todos];
     },
-    deleteTodos(todos, action: PayloadAction<number>) {
-      todos = todos.filter((todo) => todo.id !== action.payload);
+    deleteTodos(state, action: PayloadAction<number>) {
+      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
     },
-    updateTodos(todos, action: PayloadAction<TodoResponse>) {
+    updateTodos(state, action: PayloadAction<TodoResponse>) {
       const updatedTodo = castTodo(action.payload);
-      todos.forEach((todo) => {
-        if (todo.id === updatedTodo.id) {
-          todo.title = updatedTodo.title;
-          todo.description = updatedTodo.description;
-          todo.updated_at = updatedTodo.updated_at;
-        }
-      });
+      state.todos.find((todo) => todo.id === updatedTodo.id).title =
+        updatedTodo.title;
+      state.todos.find((todo) => todo.id === updatedTodo.id).description =
+        updatedTodo.description;
+      state.todos.find((todo) => todo.id === updatedTodo.id).updated_at =
+        updatedTodo.updated_at;
     },
   },
 });

@@ -45,7 +45,7 @@ class TodoController extends Controller
     {
         $service = new TodoDeleteService();
         $deleteId = $service->main($todoId);
-        return TodoIdResource::make($deleteId);
+        return $deleteId;
     }
 
     public function update(int $todoId, TodoUpdateRequest $request)
@@ -57,6 +57,6 @@ class TodoController extends Controller
             'description' => $request->description,
         ];
         $todo = $service->main($parameters);
-        return TodoIdResource::make($todo);
+        return TodoResource::make($todo);
     }
 }

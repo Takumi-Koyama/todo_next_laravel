@@ -19,24 +19,27 @@ export const TodoList: React.FC = () => {
   const [todo, setTodo] = useState<TodoCreateRequest>(initTodoCreateRequest);
 
   const router = useRouter();
-
   const token = getCookieValue(todo_token_key);
   if (token === "") {
     router.push("/Login");
   }
 
-  const todos = useSelector((state: RootState) => state.todos);
+  const { todos } = useSelector((state: RootState) => state.todos);
   const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
-      const response = await Axios.get<TodoResponse[]>("todos", {
+      const response: AxiosResponse<TodoResponse[]> = await Axios.get<
+        TodoResponse[]
+      >("todos", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.status !== 401) {
+      if (response.status === 200) {
         dispatch(initialTodos(response.data));
+      } else {
+        router.push("/Login");
       }
     })();
   }, [dispatch, initialTodos]);

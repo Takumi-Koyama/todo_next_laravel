@@ -6,40 +6,42 @@ export const Home: React.FC = () => {
   const router = useRouter();
 
   return (
-    <Layout>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <>
+      <Layout>
+        <Head>
+          <title>Create Next App</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <main>
-        <h1>Home</h1>
-        <button
-          className="primaryButton"
-          onClick={() => {
-            router.push("/Register");
-          }}
-        >
-          Register
-        </button>
-        <button
-          className="primaryButton"
-          onClick={() => {
-            router.push("/Login");
-          }}
-        >
-          Login
-        </button>
-        <button
-          className="primaryButton"
-          onClick={() => {
-            router.push("TodoList");
-          }}
-        >
-          Todo
-        </button>
-      </main>
-    </Layout>
+        <main>
+          <h1>Home</h1>
+          <button
+            className="primaryButton"
+            onClick={() => {
+              router.push("/Register");
+            }}
+          >
+            Register
+          </button>
+          <button
+            className="primaryButton"
+            onClick={() => {
+              router.push("/Login");
+            }}
+          >
+            Login
+          </button>
+          <button
+            className="primaryButton"
+            onClick={() => {
+              router.push("TodoList");
+            }}
+          >
+            Todo
+          </button>
+        </main>
+      </Layout>
+    </>
   );
 };
 
