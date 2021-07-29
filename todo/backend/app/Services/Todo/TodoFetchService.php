@@ -10,7 +10,7 @@ final class TodoFetchService
 {
     public function main(): Collection
     {
-        $todos = Todo::where('user_id', auth()->user()->id)->get();
+        $todos = Todo::where('user_id', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
         return $todos;
     }
 }
