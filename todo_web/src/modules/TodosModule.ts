@@ -14,6 +14,9 @@ const todosModule = createSlice({
   name: "todos",
   initialState,
   reducers: {
+    clearTodos(state) {
+      state.todos = [];
+    },
     initialTodos(state, action: PayloadAction<TodoResponse[]>) {
       state.todos = action.payload;
     },
@@ -36,7 +39,7 @@ const todosModule = createSlice({
   },
 });
 
-export const { initialTodos, addTodos, deleteTodos, updateTodos } =
+export const { initialTodos, addTodos, deleteTodos, updateTodos, clearTodos } =
   todosModule.actions;
 
 export default todosModule;
