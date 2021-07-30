@@ -1,34 +1,6 @@
-import {
-  // createAsyncThunk,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { castTodo, Todo } from "../models/Todo";
 import { TodoResponse } from "../models/Response/TodoResponse";
-// import Axios, { AxiosResponse } from "axios";
-// import { useDispatch } from "react-redux";
-// import { useRouter } from "next/router";
-// import { getCookieValue, todo_token_key } from "../utils/Cookie";
-
-// const initTodos = createAsyncThunk("/TodoList", async () => {
-//   const router = useRouter();
-//   const token = getCookieValue(todo_token_key);
-//   if (token === "") {
-//     router.push("/Login");
-//   }
-//   const response: AxiosResponse<TodoResponse[]> = await Axios.get<
-//     TodoResponse[]
-//   >("todos", {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-//   if (response.status === 200) {
-//     return response.data;
-//   } else {
-//     router.push("/Login");
-//   }
-// });
 
 type State = {
   todos: Todo[];
