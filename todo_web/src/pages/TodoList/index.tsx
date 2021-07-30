@@ -14,6 +14,7 @@ import {
   TodoCreateRequest,
 } from "../../models/Request/Todo/TodoCreateRequest";
 import { TodoResponse } from "../../models/Response/TodoResponse";
+import { Pagination } from "../../components/Pagination/Pagination";
 
 export const TodoList: React.FC = () => {
   const [todo, setTodo] = useState<TodoCreateRequest>(initTodoCreateRequest);
@@ -96,6 +97,7 @@ export const TodoList: React.FC = () => {
           />
         );
       })}
+      <Pagination totalCount={todos.length} />
     </Layout>
   );
 };
