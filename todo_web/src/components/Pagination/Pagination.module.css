@@ -1,0 +1,22 @@
+.pagingUl {
+  margin-bottom: 70px;
+  text-align: center;
+  white-space: nowrap;
+}
+.pagingUl a {
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 1.2rem;
+  display: inline-block;
+  color: #666;
+  background-color: #f3f0e9;
+  text-decoration: none;
+  text-align: center;
+  line-height: 44px;
+  width: 44px;
+  height: 44px;
+  margin: 0 6px;
+  transition: 0.2s ease-in-out;
+  white-space: nowrap;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+}

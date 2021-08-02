@@ -1,4 +1,5 @@
-import Link from "next/link";
+import router from "next/router";
+import styles from "./Pagination.module.css";
 
 type Props = {
   totalCount: number;
@@ -11,14 +12,17 @@ export const Pagination: React.FC<Props> = ({ totalCount }) => {
     [...Array(end - start + 1)].map((_, i) => start + i);
 
   return (
-    <ul>
+    <div className={styles.pagingUl}>
       {range(1, Math.ceil(totalCount / PER_PAGE)).map((number, index) => (
-        <li key={index}>
-          <Link href={`/TodoList/${number}`}>
-            <a>{number}</a>
-          </Link>
-        </li>
+        <a
+          onClick={() => {
+            router.push(`/TodoList/${number}`);
+          }}
+          key={index}
+        >
+          {number}
+        </a>
       ))}
-    </ul>
+    </div>
   );
 };
