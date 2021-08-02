@@ -34,7 +34,7 @@ export const Home: React.FC = () => {
           <button
             className="primaryButton"
             onClick={() => {
-              router.push("TodoList");
+              router.push("TodoList/1");
             }}
           >
             Todo

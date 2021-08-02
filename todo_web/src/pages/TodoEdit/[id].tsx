@@ -74,7 +74,7 @@ const TodoEdit: React.FC = () => {
     });
     if (response.status === 200) {
       dispatch(updateTodos(response.data));
-      router.push("/TodoList");
+      router.push("/TodoList/1");
     } else {
       alert("更新できませんでした");
     }
@@ -88,7 +88,7 @@ const TodoEdit: React.FC = () => {
     });
     if (response.status === 200) {
       dispatch(deleteTodos(id));
-      router.push("/TodoList");
+      router.push("/TodoList/1");
     } else {
       alert("削除できませんでした");
     }

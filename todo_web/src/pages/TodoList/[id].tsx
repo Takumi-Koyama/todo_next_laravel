@@ -1,16 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RootState } from "../../app/store";
 import { TodoItem } from "../../components/TodoItem/TodoItem";
 import { useRouter } from "next/router";
 import Axios, { AxiosResponse } from "axios";
-import { initialTodos } from "../../modules/TodosModule";
+import { addTodos, initialTodos } from "../../modules/TodosModule";
 import { getCookieValue, todo_token_key } from "../../utils/Cookie";
 import { Layout } from "../../components/Layout/Layout";
 import { TodoResponse } from "../../models/Response/TodoResponse";
 import { Pagination, PER_PAGE } from "../../components/Pagination/Pagination";
+import {
+  initTodoCreateRequest,
+  TodoCreateRequest,
+} from "../../models/Request/Todo/TodoCreateRequest";
+import styles from "./TodoList.module.css";
 
 export const TodoList: React.FC = () => {
+  const [todo, setTodo] = useState<TodoCreateRequest>(initTodoCreateRequest);
   const router = useRouter();
 
   const paramsId = router.query.id;
@@ -56,9 +62,58 @@ export const TodoList: React.FC = () => {
     })();
   }, [dispatch, initialTodos]);
 
+  const changedTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //左側の引数に対して、右側の値をマージする
+    const newTodo = Object.assign({}, todo);
+    newTodo.title = e.target.value;
+    setTodo(newTodo);
+  };
+
+  const changedDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    //左側の引数に対して、右側の値をマージする
+    const newTodo = Object.assign({}, todo);
+    newTodo.description = e.target.value;
+    setTodo(newTodo);
+  };
+
+  const addClick = async () => {
+    const response = await Axios.post<
+      TodoCreateRequest,
+      AxiosResponse<TodoResponse>
+    >("todos", todo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.status === 201) {
+      dispatch(addTodos(response.data));
+      router.push("/TodoList/1");
+      setTodo(initTodoCreateRequest);
+    } else {
+      alert("追加できませんでした");
+    }
+  };
+
   return (
     <Layout>
       <h1>TodoList</h1>
+      <div>
+        Title
+        <input
+          className={styles.todoTitleInput}
+          onChange={changedTitle}
+          value={todo.title}
+        />
+        Description
+        <textarea
+          className={styles.todoDescriptionInput}
+          onChange={changedDescription}
+          value={todo.description}
+        />
+        <button className="primaryButton" onClick={addClick}>
+          Add
+        </button>
+      </div>
       {testTodos.map((todo) => {
         return (
           <TodoItem
@@ -71,6 +126,9 @@ export const TodoList: React.FC = () => {
         );
       })}
       <Pagination totalCount={todos.length} />
+      <div style={{ textAlign: "center" }}>
+        {id}/{Math.ceil(todos.length / PER_PAGE)} ページ
+      </div>
     </Layout>
   );
 };

@@ -12,16 +12,16 @@ export const Pagination: React.FC<Props> = ({ totalCount }) => {
     [...Array(end - start + 1)].map((_, i) => start + i);
 
   return (
-    <div className={styles.pagingUl}>
+    <div className={styles.pagingList}>
       {range(1, Math.ceil(totalCount / PER_PAGE)).map((number, index) => (
-        <a
+        <button
           onClick={() => {
             router.push(`/TodoList/${number}`);
           }}
           key={index}
         >
           {number}
-        </a>
+        </button>
       ))}
     </div>
   );

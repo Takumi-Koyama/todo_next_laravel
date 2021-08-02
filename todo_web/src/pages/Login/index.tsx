@@ -13,7 +13,7 @@ export const Login: React.FC = () => {
     const response = await Axios.post<AuthResponse>("auth/login", user);
     document.cookie = `todo_token=${response.data.access_token}`;
     if (response.status == 200) {
-      router.push("/TodoList");
+      router.push("/TodoList/1");
     } else {
       alert("ログイン失敗");
     }
