@@ -1,22 +1,28 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { RootState } from "../../app/store";
 import { TodoItem } from "../../components/TodoItem/TodoItem";
 import { useRouter } from "next/router";
 import Axios, { AxiosResponse } from "axios";
-import { addTodos, initialTodos } from "../../modules/TodosModule";
+import { addTodos } from "../../modules/TodosModule";
 import { getCookieValue, todo_token_key } from "../../utils/Cookie";
 import { Layout } from "../../components/Layout/Layout";
 import { TodoResponse } from "../../models/Response/TodoResponse";
-import { Pagination, PER_PAGE } from "../../components/Pagination/Pagination";
+import { Pagination } from "../../components/Pagination/Pagination";
 import {
   initTodoCreateRequest,
   TodoCreateRequest,
 } from "../../models/Request/Todo/TodoCreateRequest";
 import styles from "./TodoList.module.css";
+import {
+  initTodosByPageResponse,
+  TodosByPageResponse,
+} from "../../models/Response/TodosByPageResponse";
 
 export const TodoList: React.FC = () => {
   const [todo, setTodo] = useState<TodoCreateRequest>(initTodoCreateRequest);
+  const [todosByPage, setTodosByPage] = useState<TodosByPageResponse>(
+    initTodosByPageResponse
+  );
   const router = useRouter();
 
   const paramsId = router.query.id;
@@ -30,37 +36,23 @@ export const TodoList: React.FC = () => {
     router.push("/Login");
   }
 
-  const { todos } = useSelector((state: RootState) => state.todos);
-
-  //ページネーション
-  const startIndex = PER_PAGE * (id - 1);
-  let endIndex = PER_PAGE * id;
-  if (endIndex > todos.length) {
-    endIndex = todos.length;
-  }
-  const testTodos = [];
-  for (let index = startIndex; index < endIndex; index++) {
-    testTodos.push(todos[index]);
-  }
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
-      const response: AxiosResponse<TodoResponse[]> = await Axios.get<
-        TodoResponse[]
-      >("todos", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response: AxiosResponse<TodosByPageResponse> =
+        await Axios.get<TodosByPageResponse>(`todos/byPage?page=${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       if (response.status === 200) {
-        dispatch(initialTodos(response.data));
+        setTodosByPage(response.data);
       } else {
         router.push("/Login");
       }
     })();
-  }, [dispatch, initialTodos]);
+  }, [setTodosByPage, id]);
 
   const changedTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     //左側の引数に対して、右側の値をマージする
@@ -114,7 +106,7 @@ export const TodoList: React.FC = () => {
           Add
         </button>
       </div>
-      {testTodos.map((todo) => {
+      {todosByPage.data.map((todo) => {
         return (
           <TodoItem
             key={todo.id}
@@ -125,9 +117,9 @@ export const TodoList: React.FC = () => {
           />
         );
       })}
-      <Pagination totalCount={todos.length} />
+      <Pagination todosByPageResponse={todosByPage} />
       <div style={{ textAlign: "center" }}>
-        {id}/{Math.ceil(todos.length / PER_PAGE)} ページ
+        {todosByPage.current_page}/{todosByPage.last_page} ページ
       </div>
     </Layout>
   );

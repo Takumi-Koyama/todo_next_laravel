@@ -11,6 +11,7 @@ use App\Services\Todo\TodoFetchService;
 use App\Services\Todo\TodoFetchOneService;
 use App\Services\Todo\TodoDeleteService;
 use App\Services\Todo\TodoUpdateService;
+use App\Services\Todo\TodoFetchByPageService;
 
 class TodoController extends Controller
 {
@@ -30,7 +31,10 @@ class TodoController extends Controller
     public function fetch()
     {
         $service = new TodoFetchService();
-        $todos = $service->main();
+        $parameters = [
+            'user_id' => auth()->user()->id
+        ];
+        $todos = $service->main($parameters);
         return TodoResource::collection($todos);
     }
 
@@ -39,6 +43,18 @@ class TodoController extends Controller
         $service = new TodoFetchOneService();
         $todo = $service->main($todoId);
         return TodoResource::make($todo);
+    }
+
+    public function fetchByPage()
+    {
+        $service = new TodoFetchByPageService();
+        // $parameters = [
+        //     'start_index' => $startIndex,
+        //     'end_index' => $endIndex
+        // ];
+        $todos = $service->main();
+        // return TodoResource::collection($todos);
+        return  \Response::json($todos);
     }
 
     public function delete(int $todoId)
