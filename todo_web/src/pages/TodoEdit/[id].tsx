@@ -1,49 +1,31 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
+import router from "next/router";
 import styles from "./TodoEdit.module.css";
 import { useState } from "react";
 import { castTodo } from "../../models/Todo";
 import { Layout } from "../../components/Layout/Layout";
 import {
-  initUpdateRequest,
+  initTodoUpdateRequest,
   TodoUpdateRequest,
 } from "../../models/Request/Todo/TodoUpdateRequest";
-import Axios, { AxiosResponse } from "axios";
-import { getCookieValue, todo_token_key } from "../../utils/Cookie";
 import { deleteTodos, updateTodos } from "../../modules/TodosModule";
-import { TodoResponse } from "../../models/Response/TodoResponse";
+import { deleteTodoApi, fetchTodoApi, patchTodoApi } from "../api/TodoApi";
 
 const TodoEdit: React.FC = () => {
-  const router = useRouter();
-
   const paramsId = router.query.id;
   if (typeof paramsId !== "string") {
     return;
   }
   const id = parseInt(paramsId);
 
-  const token = getCookieValue(todo_token_key);
-  if (token === "") {
-    router.push("/Login");
-  }
-
-  const [todo, setTodo] = useState<TodoUpdateRequest>(initUpdateRequest);
+  const [todo, setTodo] = useState<TodoUpdateRequest>(initTodoUpdateRequest);
 
   useEffect(() => {
     (async () => {
-      const response: AxiosResponse<TodoResponse> =
-        await Axios.get<TodoResponse>(`todos/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      if (response.status === 200) {
-        const initTodo = castTodo(response.data);
-        setTodo(initTodo);
-      } else {
-        router.push("/Login");
-      }
+      const responseTodo = await fetchTodoApi(id);
+      const initTodo = castTodo(responseTodo);
+      setTodo(initTodo);
     })();
   }, [setTodo]);
 
@@ -64,34 +46,15 @@ const TodoEdit: React.FC = () => {
   };
 
   const updateClick = async () => {
-    const response = await Axios.patch<
-      TodoUpdateRequest,
-      AxiosResponse<TodoResponse>
-    >(`todos/${id}`, todo, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.status === 200) {
-      dispatch(updateTodos(response.data));
-      router.push("/TodoList/1");
-    } else {
-      alert("更新できませんでした");
-    }
+    const responseTodo = await patchTodoApi(id, todo);
+    dispatch(updateTodos(responseTodo));
+    router.push("/TodoList");
   };
 
   const deleteClick = async () => {
-    const response = await Axios.delete<number>(`todos/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.status === 200) {
-      dispatch(deleteTodos(id));
-      router.push("/TodoList/1");
-    } else {
-      alert("削除できませんでした");
-    }
+    deleteTodoApi(id);
+    dispatch(deleteTodos(id));
+    router.push("/TodoList");
   };
 
   return (

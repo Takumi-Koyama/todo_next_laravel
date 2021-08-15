@@ -1,11 +1,22 @@
 import style from "./Header.module.css";
-import { useRouter } from "next/router";
-import { todo_token_key } from "../../utils/Cookie";
+import router from "next/router";
+import { todo_token_key } from "../../utils/Validates";
 import { clearTodos } from "../../modules/TodosModule";
 import { useDispatch } from "react-redux";
+import { isLogin } from "../../utils/Validates";
 
 export const Header: React.FC = () => {
-  const router = useRouter();
+  return (
+    <div className={style.headerArea}>
+      <div className={style.logo} onClick={() => router.push("/")}>
+        Todo
+      </div>
+      {isLogin() ? loginedHeader() : unLoginedHeader()}
+    </div>
+  );
+};
+
+const loginedHeader: React.FC = () => {
   const dispatch = useDispatch();
 
   const logoutAccount = () => {
@@ -17,20 +28,34 @@ export const Header: React.FC = () => {
   const goBack = () => {
     router.back();
   };
+  return (
+    <div className={style.headerRightArea}>
+      <button className={style.headerButton} onClick={goBack}>
+        戻る
+      </button>
+      <button className={style.headerButton} onClick={logoutAccount}>
+        ログアウト
+      </button>
+    </div>
+  );
+};
+
+const unLoginedHeader: React.FC = () => {
+  const pushRegister = () => {
+    router.push("/Register");
+  };
+  const pushLogin = () => {
+    router.push("/Login");
+  };
 
   return (
-    <div className={style.headerArea}>
-      <div className={style.logo} onClick={() => router.push("/")}>
-        Todo
-      </div>
-      <div className={style.headerRightArea}>
-        <button className={style.headerButton} onClick={goBack}>
-          戻る
-        </button>
-        <button className={style.headerButton} onClick={logoutAccount}>
-          ログアウト
-        </button>
-      </div>
+    <div className={style.headerRightArea}>
+      <button className={style.headerButton} onClick={pushRegister}>
+        新規登録
+      </button>
+      <button className={style.headerButton} onClick={pushLogin}>
+        ログイン
+      </button>
     </div>
   );
 };

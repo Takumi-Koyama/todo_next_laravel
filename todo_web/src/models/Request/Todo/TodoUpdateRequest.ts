@@ -3,7 +3,7 @@ export type TodoUpdateRequest = {
   description: string;
 };
 
-export const initUpdateRequest = {
+export const initTodoUpdateRequest = {
   title: "",
   description: "",
 };
