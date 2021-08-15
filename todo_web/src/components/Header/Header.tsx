@@ -11,12 +11,12 @@ export const Header: React.FC = () => {
       <div className={style.logo} onClick={() => router.push("/")}>
         Todo
       </div>
-      {isLogin() ? loginedHeader() : unLoginedHeader()}
+      {isLogin() ? <LoginedHeader /> : <UnLoginedHeader />}
     </div>
   );
 };
 
-const loginedHeader: React.FC = () => {
+const LoginedHeader: React.FC = () => {
   const dispatch = useDispatch();
 
   const logoutAccount = () => {
@@ -28,6 +28,7 @@ const loginedHeader: React.FC = () => {
   const goBack = () => {
     router.back();
   };
+
   return (
     <div className={style.headerRightArea}>
       <button className={style.headerButton} onClick={goBack}>
@@ -40,7 +41,7 @@ const loginedHeader: React.FC = () => {
   );
 };
 
-const unLoginedHeader: React.FC = () => {
+const UnLoginedHeader: React.FC = () => {
   const pushRegister = () => {
     router.push("/Register");
   };
