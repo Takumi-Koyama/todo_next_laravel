@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 final class TodoFetchService
 {
-    public function main(): Collection
+    public function main(array $parameters): Collection
     {
-        $todos = Todo::where('user_id', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
+        $todos = Todo::where('user_id', $parameters['user_id'])->orderBy('updated_at', 'desc')->get();
         return $todos;
     }
 }

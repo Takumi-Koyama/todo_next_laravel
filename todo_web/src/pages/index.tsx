@@ -1,10 +1,8 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import router from "next/router";
 import { Layout } from "../components/Layout/Layout";
 
 export const Home: React.FC = () => {
-  const router = useRouter();
-
   return (
     <>
       <Layout>

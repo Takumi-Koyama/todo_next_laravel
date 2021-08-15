@@ -32,6 +32,7 @@ Route::group([
 ], function () {
     Route::post('/', 'TodoController@create');
     Route::get('/', 'TodoController@fetch');
+    Route::get('/byPage', 'TodoController@fetchByPage');
     Route::get('{todoId}', 'TodoController@fetchOne');
     Route::delete('{todoId}', 'TodoController@delete');
     Route::patch('{todoId}', 'TodoController@update');

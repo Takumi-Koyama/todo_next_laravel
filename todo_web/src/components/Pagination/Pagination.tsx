@@ -1,26 +1,22 @@
 import router from "next/router";
+import { TodosByPageResponse } from "../../models/Response/TodosByPageResponse";
 import styles from "./Pagination.module.css";
 
 type Props = {
-  totalCount: number;
+  todosByPageResponse: TodosByPageResponse;
 };
 
-export const PER_PAGE = 5;
-
-export const Pagination: React.FC<Props> = ({ totalCount }) => {
-  const range = (start, end) =>
-    [...Array(end - start + 1)].map((_, i) => start + i);
-
+export const Pagination: React.FC<Props> = ({ todosByPageResponse }) => {
   return (
     <div className={styles.pagingList}>
-      {range(1, Math.ceil(totalCount / PER_PAGE)).map((number, index) => (
+      {[...Array(todosByPageResponse.last_page)].map((_, number) => (
         <button
           onClick={() => {
-            router.push(`/TodoList/${number}`);
+            router.push(`/TodoList/${number + 1}`);
           }}
-          key={index}
+          key={number + 1}
         >
-          {number}
+          {number + 1}
         </button>
       ))}
     </div>

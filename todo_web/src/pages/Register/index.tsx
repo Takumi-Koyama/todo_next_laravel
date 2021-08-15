@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import router from "next/router";
 import { useState } from "react";
 import styles from "./Register.module.css";
 import Axios from "axios";
@@ -7,7 +7,6 @@ import { Layout } from "../../components/Layout/Layout";
 
 export const Register: React.FC = () => {
   const [user, setUser] = useState<AuthRegisterRequest>();
-  const router = useRouter();
 
   const changedName = (e: React.ChangeEvent<HTMLInputElement>) => {
     //左側の引数に対して、右側の値をマージする

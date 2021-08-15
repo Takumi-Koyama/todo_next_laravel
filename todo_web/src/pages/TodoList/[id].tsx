@@ -1,42 +1,31 @@
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { RootState } from "../../app/store";
 import { TodoItem } from "../../components/TodoItem/TodoItem";
-import { useRouter } from "next/router";
-import { initialTodos } from "../../modules/TodosModule";
+import router from "next/router";
 import { Layout } from "../../components/Layout/Layout";
-import { Pagination, PER_PAGE } from "../../components/Pagination/Pagination";
-import { fetchTodosApi } from "../api/TodoApi";
+import { Pagination } from "../../components/Pagination/Pagination";
+import { fetchTodosByPageApi } from "../api/TodoApi";
+import { useState } from "react";
+import {
+  initTodosByPageResponse,
+  TodosByPageResponse,
+} from "../../models/Response/TodosByPageResponse";
 
 export const TodoList: React.FC = () => {
-  const router = useRouter();
+  const [todosByPage, setTodosByPage] = useState<TodosByPageResponse>(
+    initTodosByPageResponse
+  );
   const paramsId = router.query.id;
   if (typeof paramsId !== "string") {
     return;
   }
   const id = parseInt(paramsId);
 
-  const { todos } = useSelector((state: RootState) => state.todos);
-
-  //ページネーション
-  const startIndex = PER_PAGE * (id - 1);
-  let endIndex = PER_PAGE * id;
-  if (endIndex > todos.length) {
-    endIndex = todos.length;
-  }
-  const testTodos = [];
-  for (let index = startIndex; index < endIndex; index++) {
-    testTodos.push(todos[index]);
-  }
-
-  const dispatch = useDispatch();
-
   useEffect(() => {
     (async () => {
-      const todoResponse = await fetchTodosApi();
-      dispatch(initialTodos(todoResponse));
+      const todoByPageResponse = await fetchTodosByPageApi(id);
+      setTodosByPage(todoByPageResponse);
     })();
-  }, [dispatch, initialTodos]);
+  }, [setTodosByPage, id]);
 
   return (
     <Layout>
@@ -48,7 +37,7 @@ export const TodoList: React.FC = () => {
       >
         一覧へ
       </button>
-      {testTodos.map((todo) => {
+      {todosByPage.data.map((todo) => {
         return (
           <TodoItem
             key={todo.id}
@@ -59,9 +48,9 @@ export const TodoList: React.FC = () => {
           />
         );
       })}
-      <Pagination totalCount={todos.length} />
+      <Pagination todosByPageResponse={todosByPage} />
       <div style={{ textAlign: "center" }}>
-        {id}/{Math.ceil(todos.length / PER_PAGE)} ページ
+        {todosByPage.current_page}/{todosByPage.last_page} ページ
       </div>
     </Layout>
   );

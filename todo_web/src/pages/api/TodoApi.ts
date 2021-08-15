@@ -3,6 +3,7 @@ import Axios, { AxiosResponse } from "axios";
 import { TodoCreateRequest } from "../../models/Request/Todo/TodoCreateRequest";
 import { TodoUpdateRequest } from "../../models/Request/Todo/TodoUpdateRequest";
 import { TodoResponse } from "../../models/Response/TodoResponse";
+import { TodosByPageResponse } from "../../models/Response/TodosByPageResponse";
 import { createHeader, loginPass } from "./ApiUtils";
 
 export const fetchTodosApi = async (): Promise<TodoResponse[]> => {
@@ -15,6 +16,20 @@ export const fetchTodosApi = async (): Promise<TodoResponse[]> => {
     return response.data;
   } else {
     // throw new Error("取得できませんでした");
+    console.log("取得できませんでした");
+  }
+};
+
+export const fetchTodosByPageApi = async (
+  id: number
+): Promise<TodosByPageResponse> => {
+  loginPass();
+  const header = createHeader();
+  const response: AxiosResponse<TodosByPageResponse> =
+    await Axios.get<TodosByPageResponse>(`todos/byPage?page=${id}`, header);
+  if (response.status === 200) {
+    return response.data;
+  } else {
     console.log("取得できませんでした");
   }
 };

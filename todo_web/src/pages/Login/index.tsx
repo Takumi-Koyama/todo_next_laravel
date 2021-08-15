@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import router from "next/router";
 import styles from "./Login.module.css";
 import Axios from "axios";
 import { AuthLoginRequest } from "../../models/Request/Auth/AuthLoginRequest";
@@ -8,7 +8,6 @@ import { Layout } from "../../components/Layout/Layout";
 
 export const Login: React.FC = () => {
   const [user, setUser] = useState<AuthLoginRequest>();
-  const router = useRouter();
   const pushLogin = async () => {
     const response = await Axios.post<AuthResponse>("auth/login", user);
     document.cookie = `todo_token=${response.data.access_token}`;
